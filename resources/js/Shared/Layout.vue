@@ -1,4 +1,7 @@
 <template>
+<Head>
+    <title>Company</title>
+</Head>
 <!-- Content wrapper -->
 <div class="text-gray-600 h-screen font-mono grid md:grid-cols-3 lg:grid-cols-6">
     <div class="md:col-span-1 md:flex md:justify-end">
@@ -20,10 +23,8 @@
 
 </template>
 
-<script>
+<script setup>
+import { Head } from '@inertiajs/inertia-vue3'
 import TopNav from './Navigation/TopNav.vue'
 import SideNav from './Navigation/SideNav.vue'
-export default {
-    components: { SideNav, TopNav }
-}
 </script>

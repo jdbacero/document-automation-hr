@@ -32,8 +32,8 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/test', function () {
-    return Inertia::render('Navigation2');
+Route::get('/site/settings', function () {
+    return Inertia::render('HelloWorld');
 });
 
 require __DIR__ . '/auth.php';
