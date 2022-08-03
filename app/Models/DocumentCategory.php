@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Document extends Model
+class DocumentCategory extends Model
 {
     use HasFactory;
 
-    public function category()
+    public function documents()
     {
-        return $this->belongsTo(DocumentCategory::class, 'category_id');
+        return $this->hasMany(Document::class);
     }
 }
