@@ -32,6 +32,11 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/document/create', function () {
+    return Inertia::render('CreateDocument', [
+        'tinymce_key' => env('TINYMCE_KEY')
+    ]);
+});
 Route::get('/site/settings', function () {
     return Inertia::render('HelloWorld');
 });
