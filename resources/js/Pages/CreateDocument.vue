@@ -1,20 +1,26 @@
 <template>
 
     <Head>
-        <title>Kamusta, mundo</title>
+        <title>Document Creator</title>
     </Head>
     <form>
-        <!-- <label for="document-category">Document Category</label> -->
-        <input name="document-category" placeholder="Document Category" list="document-category" class="mb-4 rounded-full text-center focus:outline-cyan-600 border-solid hover:border-cyan-300 border-2">
-        <datalist id="document-category">
-            <!-- TODO: LOOP CATEGORIES FROM APPROPRIATE VARIABLE -->
-            <option v-for="document_category in document_categories" :key="document_category.id">{{document_category}}</option>
-        </datalist>
+        <div class="input-group">
+            <label for="document-category" class="label-input">Document Category</label>
+            <input name="document-category" placeholder="Document Category" list="document-category" class="mb-4 rounded-text-input motion-safe:animate-pulse">
+        </div>
+        <div class="input-group ml-3">
+            <label for="document_title" class="label-input">Document Title</label>
+            <datalist id="document-category">
+                <!-- TODO: LOOP CATEGORIES FROM APPROPRIATE VARIABLE -->
+                <option v-for="document_category in document_categories" :key="document_category.id">{{document_category}}</option>
+            </datalist>
+            <input type="text" placeholder="Document Title" name="document_title" class="rounded-text-input motion-safe:animate-pulse">
+        </div>
         <editor :init="{
         // plugins: 'lists link image table code help wordcount'
           plugins: 'save print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
-        menubar: 'file edit view insert format tools table help',
-        toolbar: 'save print | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+        menubar: 'edit view insert format tools table help',
+        toolbar: 'fullscreen  preview save print | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | insertfile image media template link anchor codesample | ltr rtl',
         autosave_ask_before_unload: true,
         autosave_interval: '30s',
         autosave_prefix: '{path}{query}-{id}-',
@@ -23,22 +29,24 @@
         height: 500,
         save_enablewhendirty: true,
         save_onsavecallback: (data) => {
-            this.save()
+            this.save(data)
         }
-
-
       }" :api-key="tinymce_key" />
-
     </form>
-    <h1 class="text-xl">Hello, World</h1>
+
 </template>
 
+<!-- Removes arrow from datalist -->
 <style scoped>
     input::-webkit-calendar-picker-indicator {
         display: none !important;
     }
 </style>
-
+<style>
+    .tox-statusbar__branding {
+        display: none;
+    }
+</style>
 <script>
     import Layout from '../Shared/Layout.vue'
     import {
@@ -68,7 +76,6 @@
         },
         data() {
             return {
-                content: '',
                 // FIXME: Remove me after implementing the right prop
                 document_categories: ['Sample Category', 'Sample Category 2', 'Sample Category 3']
             }

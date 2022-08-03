@@ -18,3 +18,15 @@
 .nav__active {
     @apply font-bold underline border-primary;
 }
+
+.rounded-text-input {
+    @apply rounded-full text-center focus:outline-red-600 border-solid hover:border-red-300 border-2 border-blue-400 hover:animate-none focus:animate-none transition pt-3 pb-1 bg-transparent;
+}
+
+.input-group {
+    @apply relative inline-block;
+}
+
+.label-input {
+    @apply absolute top-0 left-3 z-0 text-[10px] font-semibold text-gray-400;
+}
