@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,21 +25,30 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        $fname = Auth::user()->name;
+        return Inertia::render('Dashboard', [
+            'name' => $fname
+        ]);
+    })->name('dashboard');
+    Route::get('/document/create', function () {
+        return Inertia::render('CreateDocument', [
+            'tinymce_key' => config('app.tinymce_key')
+        ]);
+    });
 
-Route::get('/dashboard', function () {
-    $fname = Auth::user()->name;
-    return Inertia::render('Dashboard', [
-        'name' => $fname
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/document/create', function () {
-    return Inertia::render('CreateDocument', [
-        'tinymce_key' => env('TINYMCE_KEY')
-    ]);
+    // FIXME: Site settings should be for users with admin priviledges
+    Route::get('/site/settings', function () {
+        return Inertia::render('HelloWorld');
+    });
 });
-Route::get('/site/settings', function () {
-    return Inertia::render('HelloWorld');
+
+
+
+// REMOVE: This is for dev purposes. Remove upon building to production.
+Route::get('/csrf', function () {
+    return csrf_token();
 });
 
 require __DIR__ . '/auth.php';

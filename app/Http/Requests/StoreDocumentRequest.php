@@ -13,7 +13,8 @@ class StoreDocumentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        // TODO: Make sure to authorize specific users ie: admin
+        return true;
     }
 
     /**
@@ -25,6 +26,9 @@ class StoreDocumentRequest extends FormRequest
     {
         return [
             //
+            'document_title' => ['required', 'string'],
+            'document_body' => ['required', 'string'],
+            'category_id' => ['required', 'integer']
         ];
     }
 }

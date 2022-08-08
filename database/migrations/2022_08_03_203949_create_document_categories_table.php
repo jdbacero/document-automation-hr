@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('document_categories', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->mediumText('category');
+            $table->string('category')->unique();
         });
     }
 

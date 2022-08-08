@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDocumentRequest;
 use App\Http\Requests\UpdateDocumentRequest;
 use App\Models\Document;
+use App\Models\DocumentCategory;
 
 class DocumentController extends Controller
 {
@@ -37,6 +38,15 @@ class DocumentController extends Controller
     public function store(StoreDocumentRequest $request)
     {
         //
+
+        // TODO: Check if document category exists
+        $category = DocumentCategory::where('category', 'in')->exists();
+        return $category;
+
+
+        Document::create(
+            $request->validated()
+        );
     }
 
     /**
@@ -82,5 +92,10 @@ class DocumentController extends Controller
     public function destroy(Document $document)
     {
         //
+    }
+
+    public function test()
+    {
+        return 'test';
     }
 }

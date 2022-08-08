@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->mediumText('document_title');
             $table->longText('document_body');
             $table->foreignId('category_id');
         });

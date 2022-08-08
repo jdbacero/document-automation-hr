@@ -212,4 +212,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+    // TinyMCE API Key
+    'tinymce_key' => env('TINYMCE_KEY'),
 ];

@@ -53,6 +53,7 @@
         Head
     } from '@inertiajs/inertia-vue3'
     import Editor from '@tinymce/tinymce-vue'
+    import axios from 'axios'
     export default {
         layout: Layout, 
         components: {
@@ -67,10 +68,12 @@
         },
         methods: {
             save(data) {
-                // TODO: Get data from editor and save it to DB
-                console.log("saved")
-                console.log(data)
-
+                // TODO: Get data from editor and save it to 
+                
+                // This gets the content and then converts double brackets to editable spans later on
+                let document_content = tinymce.activeEditor.getContent()
+                document_content = document_content.replaceAll('{{', '<span class="mceEditable">').replaceAll('}}', '<span/>')
+                axios.post('/')
                 // TODO: Show toast that save was successful
             }
         },
