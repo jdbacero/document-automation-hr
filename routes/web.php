@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Models\DocumentCategory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -33,8 +34,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     })->name('dashboard');
     Route::get('/document/create', function () {
+        $document_categories = cache()->remember("document_categories", now()->addHour(), function () {
+            return array_column(DocumentCategory::all('category')->toArray(), 'category');
+        });
         return Inertia::render('CreateDocument', [
-            'tinymce_key' => config('app.tinymce_key')
+            'tinymce_key' => config('app.tinymce_key'),
+            'document_categories' => $document_categories
         ]);
     });
 

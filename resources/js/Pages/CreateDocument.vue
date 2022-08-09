@@ -1,25 +1,25 @@
 <template>
-
     <Head>
         <title>Document Creator</title>
     </Head>
     <form>
         <div class="input-group">
             <label for="document-category" class="label-input">Document Category</label>
-            <input name="document-category" placeholder="Document Category" list="document-category" class="mb-4 rounded-text-input motion-safe:animate-pulse">
-        </div>
-        <div class="input-group ml-3">
-            <label for="document_title" class="label-input">Document Title</label>
+            <input name="document-category" id="document_category" placeholder="Document Category" list="document-category" class="mb-4 rounded-text-input motion-safe:animate-pulse">
             <datalist id="document-category">
                 <!-- TODO: LOOP CATEGORIES FROM APPROPRIATE VARIABLE -->
                 <option v-for="document_category in document_categories" :key="document_category.id">{{document_category}}</option>
             </datalist>
-            <input type="text" placeholder="Document Title" name="document_title" class="rounded-text-input motion-safe:animate-pulse">
         </div>
+        <!-- NOTE: This commented div is supposed to be for document title. Going for JS alert instead temporarily. -->
+        <!-- <div class="input-group ml-3">
+            <label for="document_title" class="label-input">Document Title</label>
+            <input type="text" placeholder="Document Title" name="document_title" class="rounded-text-input motion-safe:animate-pulse">
+        </div> -->
         <editor :init="{
         // plugins: 'lists link image table code help wordcount'
-          plugins: 'save print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
-        menubar: 'edit view insert format tools table help',
+          plugins: 'file save print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+        menubar: 'file edit view insert format tools table help',
         toolbar: 'fullscreen  preview save print | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | insertfile image media template link anchor codesample | ltr rtl',
         autosave_ask_before_unload: true,
         autosave_interval: '30s',
@@ -62,25 +62,45 @@
         },
         props: {
             tinymce_key: {
-                type: String
+                type: String,
+                required: true
             },
-            // TODO: Replace document category variable data source from db
+            // NOTE: document_categories gets data from DB, otherwise set as default
+            document_categories: {
+                default: ['Onboarding', 'Hiring', 'Management'],
+                required: false
+            }
         },
         methods: {
             save(data) {
-                // TODO: Get data from editor and save it to 
-                
-                // This gets the content and then converts double brackets to editable spans later on
-                let document_content = tinymce.activeEditor.getContent()
-                document_content = document_content.replaceAll('{{', '<span class="mceEditable">').replaceAll('}}', '<span/>')
-                axios.post('/')
-                // TODO: Show toast that save was successful
+                // TODO: Get data from editor and save it
+                let document_title 
+                while(!document_title) {
+                    document_title = prompt('What is the name of this document?', 'My New Document')
+                }
+                // NOTE: This gets the content and then converts double brackets to editable spans later on
+                let document_body = tinymce.activeEditor.getContent()
+                document_body = document_body.replaceAll('{{', '<span class="mceEditable">').replaceAll('}}', '<span/>')
+                let document_data = {
+                    document_body: document_body,
+                    document_title: document_title,
+                    document_category: document.getElementById('document_category').value
+                }
+                console.log(document_data)
+
+                axios.post('/api/document/save', document_data)
+                .then(response => {
+                    // OPTIONAL: Show toast if error or successful on save
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    alert('An error has occured. Please try again or notify the developers.')
+                    console.log(error)
+                })
             }
         },
         data() {
             return {
-                // FIXME: Remove me after implementing the right prop
-                document_categories: ['Sample Category', 'Sample Category 2', 'Sample Category 3']
             }
         }
     }

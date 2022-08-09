@@ -6,6 +6,7 @@ use App\Http\Requests\StoreDocumentRequest;
 use App\Http\Requests\UpdateDocumentRequest;
 use App\Models\Document;
 use App\Models\DocumentCategory;
+use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
@@ -37,16 +38,23 @@ class DocumentController extends Controller
      */
     public function store(StoreDocumentRequest $request)
     {
-        //
-
-        // TODO: Check if document category exists
-        $category = DocumentCategory::where('category', 'in')->exists();
-        return $category;
-
-
-        Document::create(
+        $save = Document::create(
             $request->validated()
         );
+
+        if ($save) {
+            // SUCCESS: Save success code
+            return true;
+        } else {
+            // FAIL: Saving failed code
+            return false;
+        }
+    }
+
+    public function test(Request $request)
+    {
+        // echo json_encode($request);
+        return $request;
     }
 
     /**
@@ -92,10 +100,5 @@ class DocumentController extends Controller
     public function destroy(Document $document)
     {
         //
-    }
-
-    public function test()
-    {
-        return 'test';
     }
 }

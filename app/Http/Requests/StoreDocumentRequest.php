@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\DocumentCategory;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDocumentRequest extends FormRequest
@@ -28,7 +29,20 @@ class StoreDocumentRequest extends FormRequest
             //
             'document_title' => ['required', 'string'],
             'document_body' => ['required', 'string'],
-            'category_id' => ['required', 'integer']
+            'category_id' => ['integer']
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $document_category = $this->document_category;
+        if (!DocumentCategory::where('category', $document_category)->exists()) {
+            $category = DocumentCategory::create(['category' => $document_category]);
+        } else {
+            $category = DocumentCategory::firstWhere(['category' => $document_category]);
+        }
+        $this->merge([
+            'category_id' => $category->id
+        ]);
     }
 }
