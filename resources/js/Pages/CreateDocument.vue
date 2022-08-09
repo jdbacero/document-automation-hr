@@ -18,7 +18,7 @@
         </div> -->
         <editor :init="{
         // plugins: 'lists link image table code help wordcount'
-          plugins: 'file save print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+          plugins: 'save print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
         menubar: 'file edit view insert format tools table help',
         toolbar: 'fullscreen  preview save print | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | insertfile image media template link anchor codesample | ltr rtl',
         autosave_ask_before_unload: true,
@@ -73,12 +73,12 @@
         },
         methods: {
             save(data) {
-                // TODO: Get data from editor and save it
+                // NOTE: This sets the title of the document.
                 let document_title 
                 while(!document_title) {
                     document_title = prompt('What is the name of this document?', 'My New Document')
                 }
-                // NOTE: This gets the content and then converts double brackets to editable spans later on
+                // NOTE: This gets the content and then converts double brackets to editable spans.
                 let document_body = tinymce.activeEditor.getContent()
                 document_body = document_body.replaceAll('{{', '<span class="mceEditable">').replaceAll('}}', '<span/>')
                 let document_data = {
@@ -90,10 +90,19 @@
 
                 axios.post('/api/document/save', document_data)
                 .then(response => {
-                    // OPTIONAL: Show toast if error or successful on save
+                        // OPTIONAL: Show toast if error or successful on save
                     console.log(response.data)
+                    if(response.data) {
+                        // SUCCESS: If successfully saved
+                        alert(`Document saved.`)
+                        location.reload()
+                    } else {
+                        // FAIL: If there was a problem with saving
+                        alert('An error has occured. Please try again or notify the developers.')
+                    }
                 })
                 .catch(error => {
+                    // FAIL: If there was a problem with saving
                     alert('An error has occured. Please try again or notify the developers.')
                     console.log(error)
                 })

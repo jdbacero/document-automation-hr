@@ -27,19 +27,23 @@ Route::get('/', function () {
     ]);
 });
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/dashboard', function () {
         $fname = Auth::user()->name;
         return Inertia::render('Dashboard', [
             'name' => $fname
         ]);
     })->name('dashboard');
+
     Route::get('/document/create', function () {
         $document_categories = cache()->remember("document_categories", now()->addHour(), function () {
-            return array_column(DocumentCategory::all('category')->toArray(), 'category');
+            return DocumentCategory::all('category');
         });
+
+        $arr = array_column($document_categories->toArray(), 'category');
         return Inertia::render('CreateDocument', [
             'tinymce_key' => config('app.tinymce_key'),
-            'document_categories' => $document_categories
+            'document_categories' => $arr
         ]);
     });
 

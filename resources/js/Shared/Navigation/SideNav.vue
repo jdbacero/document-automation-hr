@@ -57,7 +57,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 export default {
     components: { Link },
     data() {
-        
+        // TODO: Get document categories
     }, 
     methods: {
         showMenu() {

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('category')->unique();
+            $table->boolean('enabled')->default(true);
         });
     }
 

@@ -35,6 +35,8 @@ class StoreDocumentRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        /* NOTE: Get document category sent from client-side, and check for existing
+        NOTE: category. If it does not exist, create the category. Get category ID and save to document. */
         $document_category = $this->document_category;
         if (!DocumentCategory::where('category', $document_category)->exists()) {
             $category = DocumentCategory::create(['category' => $document_category]);
