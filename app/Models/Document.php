@@ -11,7 +11,7 @@ class Document extends Model
     protected $fillable = [
         'document_title',
         'document_body',
-        'category_id',
+        'document_category_id',
     ];
     public function category()
     {

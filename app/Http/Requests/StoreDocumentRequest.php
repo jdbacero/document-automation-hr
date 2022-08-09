@@ -29,7 +29,7 @@ class StoreDocumentRequest extends FormRequest
             //
             'document_title' => ['required', 'string'],
             'document_body' => ['required', 'string'],
-            'category_id' => ['integer']
+            'document_category_id' => ['integer']
         ];
     }
 
@@ -44,7 +44,7 @@ class StoreDocumentRequest extends FormRequest
             $category = DocumentCategory::firstWhere(['category' => $document_category]);
         }
         $this->merge([
-            'category_id' => $category->id
+            'document_category_id' => $category->id
         ]);
     }
 }

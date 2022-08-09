@@ -104,7 +104,7 @@
                 .catch(error => {
                     // FAIL: If there was a problem with saving
                     alert('An error has occured. Please try again or notify the developers.')
-                    console.log(error)
+                    console.error(error)
                 })
             }
         },
