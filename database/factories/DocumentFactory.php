@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\DocumentCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,9 @@ class DocumentFactory extends Factory
     {
         return [
             //
+            'document_title' => $this->faker->sentence,
+            'document_body' => '<p>' . $this->faker->paragraph . '</p>',
+            'document_category_id' => DocumentCategory::factory()
         ];
     }
 }

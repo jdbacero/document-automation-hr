@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Document;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,5 +21,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Jorex Bacero',
             'email' => 'jdbacero@gmail.com',
         ]);
+
+        Document::factory(3)->create();
     }
 }
