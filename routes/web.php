@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Models\Document;
 use App\Models\DocumentCategory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
@@ -42,10 +43,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         $arr = array_column($document_categories->toArray(), 'category');
         return Inertia::render('CreateDocument', [
-            'tinymce_key' => config('app.tinymce_key'),
+            'tinymce_key' => cache()->rememberForever('tinymce_key', fn () => config('app.tinymce_key')),
             'document_categories' => $arr
         ]);
     });
+
+    Route::get('/document/{id}', function ($id) {
+        $document = Document::firstWhere('id', $id);
+        return Inertia::render('DocumentView', [
+            'tinymce_key' => cache()->rememberForever('tinymce_key', fn () => config('app.tinymce_key')),
+            'document' => $document
+        ]);
+    })->whereNumber('id');
 
     // FIXME: Site settings should be for users with admin priviledges
     Route::get('/site/settings', function () {

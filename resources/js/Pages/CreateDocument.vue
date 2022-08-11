@@ -30,7 +30,20 @@
         save_enablewhendirty: true,
         save_onsavecallback: (data) => {
             this.save(data)
-        }
+        },
+        
+        /* enable automatic uploads of images represented by blob or data URIs*/
+        automatic_uploads: true,
+        /*
+            URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
+            images_upload_url: 'postAcceptor.php',
+            here we add custom filepicker only to Image dialog
+        */
+        file_picker_types: 'image',
+        /* and here's our custom image picker*/
+        file_picker_callback: (cb, value, meta) => {
+            uploadImage(cb, value, meta)
+        },
       }" :api-key="tinymce_key" />
     </form>
 
@@ -54,11 +67,13 @@
     } from '@inertiajs/inertia-vue3'
     import Editor from '@tinymce/tinymce-vue'
     import axios from 'axios'
+    import { store } from './../Shared/components/Store.vue'
     export default {
         layout: Layout, 
         components: {
             Head,
-            'editor': Editor
+            'editor': Editor,
+            store
         },
         props: {
             tinymce_key: {
@@ -72,15 +87,20 @@
             }
         },
         methods: {
-            save(data) {
+            save() {
                 // NOTE: This sets the title of the document.
                 let document_title 
                 while(!document_title) {
                     document_title = prompt('What is the name of this document?', 'My New Document')
                 }
+
+                tinymce.activeEditor.dom.addClass(tinymce.activeEditor.dom.select('*'), 'mceNonEditable')
                 // NOTE: This gets the content and then converts double brackets to editable spans.
-                let document_body = tinymce.activeEditor.getContent()
-                document_body = document_body.replaceAll('{{', '<span class="mceEditable">').replaceAll('}}', '<span/>')
+                let document_body = tinymce.activeEditor.getContent().concat('<p class="mceEditable"></p>')
+                
+                // FEATURE: Gets all the curly braces and sets them to an editable class with minimum width so that if user clears span content, it's still visible. 
+                document_body = document_body.replaceAll('{{', `<span class="mceEditable" style="display:inline-block; min-width:15px">`).replaceAll('}}', '<span/>')
+
                 let document_data = {
                     document_body: document_body,
                     document_title: document_title,
@@ -95,7 +115,15 @@
                     if(response.data) {
                         // SUCCESS: If successfully saved
                         alert(`Document saved.`)
-                        location.reload()
+                        
+                        // NOTE: Updates the global store.documents and then subsequently updates side nav
+                        store.getDocuments()
+
+                        // Clean/clear variables and inputs
+                        document_data = null
+                        document_title = null
+                        tinymce.activeEditor.setContent('')
+                        document.getElementById('document_category').value = ""
                     } else {
                         // FAIL: If there was a problem with saving
                         alert('An error has occured. Please try again or notify the developers.')
@@ -106,10 +134,35 @@
                     alert('An error has occured. Please try again or notify the developers.')
                     console.error(error)
                 })
-            }
-        },
-        data() {
-            return {
+            },
+            uploadImage(cb, value, meta) {
+                const input = document.createElement('iQnput');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                    /*
+                        Note: Now we need to register the blob in TinyMCEs image blob
+                        registry. In the next release this part hopefully won't be
+                        necessary, as we are looking to handle it internally.
+                        */
+                        const id = 'blobid' + (new Date()).getTime();
+                        const blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                        const base64 = reader.result.split(',')[1];
+                        const blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        /* call the callback and populate the Title field with the file name */
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    });
+                reader.readAsDataURL(file);
+            });
+
+            input.click();
             }
         }
     }
