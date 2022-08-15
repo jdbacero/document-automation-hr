@@ -61,8 +61,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/document/all', function () {
         return Inertia::render('DocumentList', [
-            'documents' => Document::with('category')->get()
+            'documents' => Document::with('category')->get(),
+            'categories' => DocumentCategory::all()
         ]);
+        // return Inertia::render('DocumentList', [
+        //     'documents' => Document::with('category')->get()
+        // ]);
     });
 
 

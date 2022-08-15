@@ -15,6 +15,10 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
-        @inertia
+        <div id="doc_app">
+            @inertia
+        </div>
+        
     </body>
+    
 </html>

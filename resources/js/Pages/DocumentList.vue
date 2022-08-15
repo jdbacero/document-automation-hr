@@ -7,26 +7,73 @@
         <h3 class="text-2xl font-semibold">All Documents</h3>
     </header>
 
-    <div>
-        <h4 class="font-bold mt-12 pb-2 border-b border-gray-200"></h4>
+    <div class="">
+        <h4 class="font-bold mt-12 pb-2 border-b border-gray-200">Documents</h4>
 
         <div class="mt-8 grid md:grid-cols-3 gap-10">
             <!-- Content goes here -->
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg col-span-3">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 sortable">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <div class="table-container col-span-3">
+                <table class="table-default sortable">
+                    <thead class="table-default-head">
                         <tr>
-                            <th scope="col" class="py-3 px-6">
+                            <th class="py-3 px-6">
                                 Document Name
                             </th>
-                            <th scope="col" class="py-3 px-6">
+                            <th class="py-3 px-6">
                                 Category
                             </th>
-                            <th scope="col" class="py-3 px-6">
+                            <th class="py-3 px-6">
                                 Visibility
                             </th>
-                            <th scope="col" class="py-3 px-6">
+                            <th class="py-3 px-6">
                                 Permissions
+                            </th>
+                            <th class="py-3 px-6">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-default-row" v-for="document in documents" :key="document.id">
+                            <td 
+                                class="table-default-td">
+                                {{document["document_title"]}}
+                            </td>
+                            <td class="table-default-td">
+                                {{document["category"]["category"]}}
+                            </td>
+                            <td class="table-default-td">
+                                <!-- TODO: -->
+                                To be implemented
+                            </td>
+                            <td class="table-default-td">
+                                <!-- TODO: -->
+                                To be implemented
+                            </td>
+                            <td class="table-default-td">
+                                <a href="#"
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline pr-1">Edit</a>
+                                <a href="#"
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline pl-1">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h4 class="font-bold mt-12 pb-2 border-b border-gray-200">Categories</h4>
+        <div class="mt-8 grid md:grid-cols-3 gap-10">
+            <!-- Content goes here -->
+            <div class="table-container col-span-3">
+                <table class="table-default sortable">
+                    <thead class="table-default-head">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">
+                                Category Name
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Enabled / Disabled
                             </th>
                             <th scope="col" class="py-3 px-6">
                                 Action
@@ -34,105 +81,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                            <th scope="row"
-                                class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="py-4 px-6">
-                                Sliver
+                        <tr class="table-default-row" v-for="category in categories" :key="category.id">
+                            <td class="table-default-td">
+                                {{category['category']}}
                             </td>
-                            <td class="py-4 px-6">
-                                Laptop
+                            <td class="table-default-td">
+                                <!-- TODO: To be implemented -->
                             </td>
-                            <td class="py-4 px-6">
-                                $2999
-                            </td>
-                            <td class="py-4 px-6">
+                            <td class="table-default-td">
                                 <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td class="py-4 px-6">
-                                White
-                            </td>
-                            <td class="py-4 px-6">
-                                Laptop PC
-                            </td>
-                            <td class="py-4 px-6">
-                                $1999
-                            </td>
-                            <td class="py-4 px-6">
-                                <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                            <th scope="row"
-                                class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Magic Mouse 2
-                            </th>
-                            <td class="py-4 px-6">
-                                Black
-                            </td>
-                            <td class="py-4 px-6">
-                                Accessories
-                            </td>
-                            <td class="py-4 px-6">
-                                $99
-                            </td>
-                            <td class="py-4 px-6">
-                                <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Google Pixel Phone
-                            </th>
-                            <td class="py-4 px-6">
-                                Gray
-                            </td>
-                            <td class="py-4 px-6">
-                                Phone
-                            </td>
-                            <td class="py-4 px-6">
-                                $799
-                            </td>
-                            <td class="py-4 px-6">
-                                <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"
-                                class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple Watch 5
-                            </th>
-                            <td class="py-4 px-6">
-                                Red
-                            </td>
-                            <td class="py-4 px-6">
-                                Wearables
-                            </td>
-                            <td class="py-4 px-6">
-                                $999
-                            </td>
-                            <td class="py-4 px-6">
-                                <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+    
     </div>
 </template>
 
@@ -141,6 +106,7 @@
     import {
         Head
     } from '@inertiajs/inertia-vue3'
+    import { store } from './../Shared/components/Store.vue'
     export default {
         components: {
             Layout,
@@ -149,11 +115,16 @@
         layout: Layout,
         props: {
             documents: {
-                type: Array,
+                required: true
+            },
+            categories: {
                 required: true
             }
+        }, 
+        data() {
         },
         created() {
+            // NOTE: Adds local script
             var scripts = [
                 "/js/sorttable.js"
             ];
@@ -162,6 +133,13 @@
                 tag.setAttribute("src", script);
                 document.head.appendChild(tag);
             });
+        },
+        methods: {
+            deleteCategory() {
+
+                // NOTE: Updates sidenav when deleting/editing a category/document
+                store.getDocuments()
+            }
         }
     }
 
