@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         $arr = array_column($document_categories->toArray(), 'category');
-        return Inertia::render('CreateDocument', [
+        return Inertia::render('DocumentCreate', [
             'tinymce_key' => cache()->rememberForever('tinymce_key', fn () => config('app.tinymce_key')),
             'document_categories' => $arr
         ]);
@@ -50,11 +50,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/document/{id}', function ($id) {
         $document = Document::firstWhere('id', $id);
+        if (!$document) {
+            abort(404);
+        }
         return Inertia::render('DocumentView', [
             'tinymce_key' => cache()->rememberForever('tinymce_key', fn () => config('app.tinymce_key')),
             'document' => $document
         ]);
     })->whereNumber('id');
+
+    Route::get('/document/all', function () {
+        return Inertia::render('DocumentList', [
+            'documents' => Document::with('category')->get()
+        ]);
+    });
+
+
 
     // FIXME: Site settings should be for users with admin priviledges
     Route::get('/site/settings', function () {

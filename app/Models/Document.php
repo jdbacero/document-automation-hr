@@ -13,8 +13,9 @@ class Document extends Model
         'document_body',
         'document_category_id',
     ];
+
     public function category()
     {
-        return $this->belongsTo(DocumentCategory::class, 'category_id');
+        return $this->belongsTo(DocumentCategory::class, 'document_category_id');
     }
 }
