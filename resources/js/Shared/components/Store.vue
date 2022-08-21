@@ -10,6 +10,7 @@ export const store = reactive({
             this.documents = response.data
             console.log(response.data)
         })
-  }
+  },
+  isDark: false
 })
 </script>

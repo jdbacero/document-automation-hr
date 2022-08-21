@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'company_name' => config('app.company_name') ? config('app.company_name') : 'COMPANY NAME',
         ]);
     }
 }

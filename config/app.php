@@ -215,4 +215,6 @@ return [
 
     // TinyMCE API Key
     'tinymce_key' => env('TINYMCE_KEY'),
+    // Company name
+    'company_name' => env('COMPANY_NAME'),
 ];

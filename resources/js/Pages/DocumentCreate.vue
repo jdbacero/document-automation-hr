@@ -19,8 +19,7 @@
             <input type="text" placeholder="Document Title" name="document_title" class="rounded-text-input motion-safe:animate-pulse">
         </div> -->
         <editor :init="{
-        // plugins: 'lists link image table code help wordcount'
-          plugins: 'save print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+        plugins: 'save print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
         menubar: 'file edit view insert format tools table help',
         toolbar: 'fullscreen  preview save print | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | insertfile image media template link anchor codesample | ltr rtl',
         autosave_ask_before_unload: true,
@@ -33,7 +32,14 @@
         save_onsavecallback: (data) => {
             this.save(data)
         },
-        
+        setup: (editor) => {
+                editor.on('init', function (e) {
+                    // NOTE: If editing, set document body.
+                    if(document) {
+                        editor.setContent(document.document_body)
+                    }                
+            })
+        },
         /* enable automatic uploads of images represented by blob or data URIs*/
         automatic_uploads: true,
         /*
@@ -86,56 +92,73 @@
             document_categories: {
                 default: ['Onboarding', 'Hiring', 'Management'],
                 required: false
+            },
+            document: {
+                default: false,
+                required:false
             }
         },
+        data() {
+            return {
+                
+            }
+        },  
         methods: {
             save() {
+                let document_title = this.document ? this.document['document_title'] : ''
                 // NOTE: This sets the title of the document.
-                let document_title 
                 while(!document_title) {
                     document_title = prompt('What is the name of this document?', 'My New Document')
                 }
-
-                tinymce.activeEditor.dom.addClass(tinymce.activeEditor.dom.select('*'), 'mceNonEditable')
-                // NOTE: This gets the content and then converts double brackets to editable spans.
-                let document_body = tinymce.activeEditor.getContent().concat('<p class="mceEditable"></p>')
                 
-                // FEATURE: Gets all the curly braces and sets them to an editable class with minimum width so that if user clears span content, it's still visible. 
-                document_body = document_body.replaceAll('{{', `<span class="mceEditable" style="display:inline-block; min-width:15px">`).replaceAll('}}', '<span/>')
+                if(this.document) {
+                    // NOTE: Update if on editing mode
+                    
+                } else {
+                    // NOTE: Save if creating new document
 
-                let document_data = {
-                    document_body: document_body,
-                    document_title: document_title,
-                    document_category: document.getElementById('document_category').value
-                }
-                console.log(document_data)
-
-                axios.post('/api/document/save', document_data)
-                .then(response => {
-                        // OPTIONAL: Show toast if error or successful on save
-                    console.log(response.data)
-                    if(response.data) {
-                        // SUCCESS: If successfully saved
-                        alert(`Document saved.`)
-                        
-                        // NOTE: Updates the global store.documents and then subsequently updates side nav
-                        store.getDocuments()
-
-                        // Clean/clear variables and inputs
-                        document_data = null
-                        document_title = null
-                        tinymce.activeEditor.setContent('')
-                        document.getElementById('document_category').value = ""
-                    } else {
+    
+                    tinymce.activeEditor.dom.addClass(tinymce.activeEditor.dom.select('*'), 'mceNonEditable')
+                    // NOTE: This gets the content and then converts double brackets to editable spans.
+                    let document_body = tinymce.activeEditor.getContent().concat('<p class="mceEditable"></p>')
+                    
+                    // FEATURE: Gets all the curly braces and sets them to an editable class with minimum width so that if user clears span content, it's still visible. 
+                    document_body = document_body.replaceAll('{{', `<span class="mceEditable" style="display:inline-block; min-width:15px">`).replaceAll('}}', '<span/>')
+    
+                    let document_data = {
+                        document_body: document_body,
+                        document_title: document_title,
+                        document_category: document.getElementById('document_category').value
+                    }
+                    console.log(document_data)
+    
+                    axios.post('/api/document/save', document_data)
+                    .then(response => {
+                            // OPTIONAL: Show toast if error or successful on save
+                        console.log(response.data)
+                        if(response.data) {
+                            // SUCCESS: If successfully saved
+                            alert(`Document saved.`)
+                            
+                            // NOTE: Updates the global store.documents and then subsequently updates side nav
+                            store.getDocuments()
+    
+                            // Clean/clear variables and inputs
+                            document_data = null
+                            document_title = null
+                            tinymce.activeEditor.setContent('')
+                            document.getElementById('document_category').value = ""
+                        } else {
+                            // FAIL: If there was a problem with saving
+                            alert('An error has occured. Please try again or notify the developers.')
+                        }
+                    })
+                    .catch(error => {
                         // FAIL: If there was a problem with saving
                         alert('An error has occured. Please try again or notify the developers.')
-                    }
-                })
-                .catch(error => {
-                    // FAIL: If there was a problem with saving
-                    alert('An error has occured. Please try again or notify the developers.')
-                    console.error(error)
-                })
+                        console.error(error)
+                    })
+                }
             },
             uploadImage(cb, value, meta) {
                 const input = document.createElement('iQnput');
@@ -165,6 +188,9 @@
             });
 
             input.click();
+            },
+            logger(e) {
+                console.log(e)
             }
         }
     }

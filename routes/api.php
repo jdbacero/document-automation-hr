@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // TODO: Add authentication
 Route::post('/document/save', [DocumentController::class, 'store']);
+Route::post('/document/update', [DocumentController::class, 'store']);
 Route::post('/document/categories', function () {
     return DocumentCategory::with('documents')->get()->toJson();
 });

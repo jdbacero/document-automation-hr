@@ -51,10 +51,10 @@
                                 To be implemented
                             </td>
                             <td class="table-default-td">
+                                <a :href="'/document/edit/'+document['id']"
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline pr-3">Edit</a>
                                 <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline pr-1">Edit</a>
-                                <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline pl-1">Delete</a>
+                                    class="font-medium text-red-600 dark:text-red-500 hover:underline pl-3">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -85,8 +85,11 @@
                             <td class="table-default-td">
                                 {{category['category']}}
                             </td>
-                            <td class="table-default-td">
-                                <!-- TODO: To be implemented -->
+                            <td class="table-default-td" v-if="category['enabled']">
+                                Enabled
+                            </td>
+                            <td class="table-default-td" v-else>
+                                Disabled
                             </td>
                             <td class="table-default-td">
                                 <a href="#"

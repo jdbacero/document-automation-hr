@@ -27,6 +27,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', function () {
@@ -59,14 +60,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     })->whereNumber('id');
 
+    Route::get('/document/edit/{id}', function ($id) {
+        $document = Document::firstWhere('id', $id);
+        if (!$document) {
+            abort(404);
+        }
+        $document_categories = cache()->remember("document_categories", now()->addHour(), function () {
+            return DocumentCategory::all('category');
+        });
+
+        $arr = array_column($document_categories->toArray(), 'category');
+
+        return Inertia::render('DocumentCreate', [
+            'tinymce_key' => cache()->rememberForever('tinymce_key', fn () => config('app.tinymce_key')),
+            'document' => $document,
+            'document_categories' => $arr
+        ]);
+    })->whereNumber('id');
+
     Route::get('/document/all', function () {
         return Inertia::render('DocumentList', [
             'documents' => Document::with('category')->get(),
             'categories' => DocumentCategory::all()
         ]);
-        // return Inertia::render('DocumentList', [
-        //     'documents' => Document::with('category')->get()
-        // ]);
     });
 
 

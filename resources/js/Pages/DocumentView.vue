@@ -73,8 +73,6 @@
         },
         methods: {
             setDocumentContent() {
-                // return `<p class='mceNonEditable'>test adsfhasd fasdhjfhasd jkfhadsjkfhasd klf</p>
-                // <p class='mceNonEditable'>My name is <span class='mceEditable' style='display:inline-block; width: 10px;'>name goes here</span>.</p>`
                 return this.document.document_body
             },
             uploadImage(cb, value, meta) {

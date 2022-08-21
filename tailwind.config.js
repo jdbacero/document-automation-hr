@@ -7,9 +7,10 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
-        './src/**/*.{html,js}', 
+        './src/**/*.{html,js}',
         // './node_modules/tw-elements/dist/js/**/*.js',
     ],
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {
@@ -18,6 +19,11 @@ module.exports = {
                     100: '#E2E2D5',
                     200: '#888883',
                 }
+            },
+            fontFamily: {
+                bree: ['Bree Serif'],
+                trirong: ['Trirong'],
+                exo: ['Exo']
             }
         },
     },
@@ -27,5 +33,6 @@ module.exports = {
 
     plugins: [
         // require('tw-elements/dist/plugin')
+
     ],
 };
