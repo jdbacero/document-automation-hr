@@ -29,7 +29,8 @@ class StoreDocumentRequest extends FormRequest
             //
             'document_title' => ['required', 'string'],
             'document_body' => ['required', 'string'],
-            'document_category_id' => ['integer']
+            'document_category_id' => ['integer'],
+            'admin_only' => ['integer'],
         ];
     }
 

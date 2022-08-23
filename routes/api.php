@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\DocumentCategoryController;
 use App\Http\Controllers\DocumentController;
 use App\Models\DocumentCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,13 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 // TODO: Add authentication
 Route::post('/document/save', [DocumentController::class, 'store']);
 Route::post('/document/update', [DocumentController::class, 'store']);
-Route::post('/document/categories', function () {
-    return DocumentCategory::with('documents')->get()->toJson();
-});
+Route::post('/document/categories', [DocumentCategoryController::class, 'getAll']);
+// Route::get('/test', [DocumentCategoryController::class, 'getAll']);

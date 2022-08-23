@@ -12,6 +12,7 @@ class Document extends Model
         'document_title',
         'document_body',
         'document_category_id',
+        'admin_only'
     ];
 
     public function category()

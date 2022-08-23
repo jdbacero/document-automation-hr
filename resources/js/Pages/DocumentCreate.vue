@@ -128,7 +128,8 @@
                     let document_data = {
                         document_body: document_body,
                         document_title: document_title,
-                        document_category: document.getElementById('document_category').value
+                        document_category: document.getElementById('document_category').value,
+                        admin_only: document.getElementById('view_permission').checked ? 1 : 0
                     }
                     console.log(document_data)
     
@@ -141,7 +142,7 @@
                             alert(`Document saved.`)
                             
                             // NOTE: Updates the global store.documents and then subsequently updates side nav
-                            store.getDocuments()
+                            store.getDocuments(true)
     
                             // Clean/clear variables and inputs
                             document_data = null
@@ -156,7 +157,7 @@
                     .catch(error => {
                         // FAIL: If there was a problem with saving
                         alert('An error has occured. Please try again or notify the developers.')
-                        console.error(error)
+                        console.error(error.response.data)
                     })
                 }
             },

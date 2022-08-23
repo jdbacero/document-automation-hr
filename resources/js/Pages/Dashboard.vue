@@ -69,6 +69,6 @@ export default {
         name: {
             type: String
         }
-    }
+    },
 }
 </script>

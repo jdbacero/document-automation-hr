@@ -48,7 +48,7 @@
                             </td>
                             <td class="table-default-td">
                                 <!-- TODO: -->
-                                To be implemented
+                                {{ document["admin_only"] ? "Admins" : "Everyone"}}
                             </td>
                             <td class="table-default-td">
                                 <a :href="'/document/edit/'+document['id']"

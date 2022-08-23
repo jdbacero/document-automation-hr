@@ -19,6 +19,7 @@ return new class extends Migration
             $table->mediumText('document_title');
             $table->longText('document_body');
             $table->foreignId('document_category_id');
+            $table->tinyInteger('admin_only')->default(0);
         });
     }
 
