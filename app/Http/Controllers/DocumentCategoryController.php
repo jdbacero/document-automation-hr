@@ -16,14 +16,27 @@ class DocumentCategoryController extends Controller
                 return DocumentCategory::with(
                     [
                         'documents' => function ($query) use ($req) {
-                            $query->where('admin_only', 0);
+                            $query->where('admin_only', 0)
+                                ->where('visible', 1);
                         }
                     ]
                 )->get();
             }
-            return DocumentCategory::with('documents')->get();
+            return DocumentCategory::with(
+                [
+                    'documents' => function ($query) use ($req) {
+                        $query->where('visible', 1);
+                    }
+                ]
+            )->get();
         } else {
-            return DocumentCategory::with('documents')->get();
+            return DocumentCategory::with(
+                [
+                    'documents' => function ($query) use ($req) {
+                        $query->where('visible', 1);
+                    }
+                ]
+            )->get();
         }
     }
 }

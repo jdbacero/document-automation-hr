@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateDocumentRequest;
 use App\Models\Document;
 use App\Models\DocumentCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentController extends Controller
 {
@@ -49,6 +50,35 @@ class DocumentController extends Controller
             // FAIL: Saving failed code
             return false;
         }
+    }
+
+    public function toggleVisibility($id)
+    {
+        $visible = Document::firstWhere('id', $id)->visible;
+        if ($visible) {
+            Document::where('id', $id)->update(['visible' => 0]);
+        } else if (!$visible) {
+            Document::where('id', $id)->update(['visible' => 1]);
+        } else {
+            abort(500);
+        }
+    }
+
+    public function togglePermission($id)
+    {
+        // if (Auth::is_admin()) {
+        if (true) {
+            $admin_only = Document::firstWhere('id', $id)->admin_only;
+            if ($admin_only) {
+                Document::where('id', $id)->update(['admin_only' => 0]);
+            } else if (!$admin_only) {
+                Document::where('id', $id)->update(['admin_only' => 1]);
+            } else {
+                abort(500);
+            }
+            return true;
+        }
+        return false;
     }
 
     public function test(Request $request)

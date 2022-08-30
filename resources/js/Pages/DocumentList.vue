@@ -34,7 +34,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="table-default-row" v-for="document in documents" :key="document.id">
+                        <tr class="table-default-row" v-for="(document, index) in documents" :key="document.id">
                             <td 
                                 class="table-default-td">
                                 {{document["document_title"]}}
@@ -43,12 +43,18 @@
                                 {{document["category"]["category"]}}
                             </td>
                             <td class="table-default-td">
-                                <!-- TODO: -->
-                                To be implemented
+                                <a v-if="document['visible']" @click="toggleDocumentVisibility(document['id'], index)"
+                                    class="hover:cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline pr-3">Visible</a>
+                                <a v-else @click="toggleDocumentVisibility(document['id'], index)"
+                                    class="hover:cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline pr-3">Hidden</a>
                             </td>
                             <td class="table-default-td">
                                 <!-- TODO: -->
-                                {{ document["admin_only"] ? "Admins" : "Everyone"}}
+
+                                <a v-if="document['admin_only']" @click="toggleDocumentAdmin(document['id'], index)"
+                                    class="hover:cursor-pointer font-medium text-yellow-600 dark:text-yellow-500 hover:underline pr-3">Admins</a>
+                                <a v-else @click="toggleDocumentAdmin(document['id'], index)"
+                                    class="hover:cursor-pointer font-medium text-green-600 dark:green-red-500 hover:underline pr-3">Everyone</a>
                             </td>
                             <td class="table-default-td">
                                 <a :href="'/document/edit/'+document['id']"
@@ -93,7 +99,7 @@
                             </td>
                             <td class="table-default-td">
                                 <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -110,6 +116,7 @@
         Head
     } from '@inertiajs/inertia-vue3'
     import { store } from './../Shared/components/Store.vue'
+    import axios from 'axios';
     export default {
         components: {
             Layout,
@@ -142,6 +149,35 @@
 
                 // NOTE: Updates sidenav when deleting/editing a category/document
                 store.getDocuments()
+            },
+            toggleDocumentVisibility(id, arr_index) {
+                axios.post(`/api/document/visibility/${id}`)
+                .then(response => {
+                    this.documents[arr_index]['visible'] = this.documents[arr_index]['visible'] ? 0 : 1
+                    // console.log(response.data)
+                })
+                .catch(err => {
+                    alert("Something went wrong. Please try again. If problem persists, notify the developers.")
+                    console.error(err)
+                })
+                store.getDocuments(true)
+            },
+            toggleDocumentAdmin(id, arr_index) {
+                axios.post(`/api/document/admin/${id}`)
+                .then(response => {
+                    this.documents[arr_index]['admin_only'] = this.documents[arr_index]['admin_only'] ? 0 : 1
+                    console.log(this.documents[arr_index])
+                    // console.log(response.data)
+                })
+                .catch(err => {
+                    alert("Something went wrong. Please try again. If problem persists, notify the developers.")
+                    console.error(err)
+                })
+                store.getDocuments(true)
+            },
+            deleteDocument(id) {
+                
+                store.getDocuments(true)
             }
         }
     }

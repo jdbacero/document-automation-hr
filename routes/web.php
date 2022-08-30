@@ -3,6 +3,7 @@
 use App\Http\Controllers\DocumentController;
 use App\Models\Document;
 use App\Models\DocumentCategory;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -86,11 +87,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     });
 
-
-
-    // FIXME: Site settings should be for users with admin priviledges
-    Route::get('/site/settings', function () {
-        return Inertia::render('HelloWorld');
+    Route::get('/users/list', function () {
+        return Inertia::render('UsersList', [
+            'users' => User::all()
+        ]);
     });
 });
 
