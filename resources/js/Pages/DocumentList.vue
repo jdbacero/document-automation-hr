@@ -54,7 +54,7 @@
                                 <a v-if="document['admin_only']" @click="toggleDocumentAdmin(document['id'], index)"
                                     class="hover:cursor-pointer font-medium text-yellow-600 dark:text-yellow-500 hover:underline pr-3">Admins</a>
                                 <a v-else @click="toggleDocumentAdmin(document['id'], index)"
-                                    class="hover:cursor-pointer font-medium text-green-600 dark:green-red-500 hover:underline pr-3">Everyone</a>
+                                    class="hover:cursor-pointer font-medium text-green-600 dark:text-green-500 hover:underline pr-3">Everyone</a>
                             </td>
                             <td class="table-default-td">
                                 <a :href="'/document/edit/'+document['id']"
@@ -151,7 +151,7 @@
                 store.getDocuments()
             },
             toggleDocumentVisibility(id, arr_index) {
-                axios.post(`/api/document/visibility/${id}`)
+                axios.put(`/api/document/visibility/${id}`)
                 .then(response => {
                     this.documents[arr_index]['visible'] = this.documents[arr_index]['visible'] ? 0 : 1
                     // console.log(response.data)
@@ -163,7 +163,7 @@
                 store.getDocuments(true)
             },
             toggleDocumentAdmin(id, arr_index) {
-                axios.post(`/api/document/admin/${id}`)
+                axios.put(`/api/document/admin/${id}`)
                 .then(response => {
                     this.documents[arr_index]['admin_only'] = this.documents[arr_index]['admin_only'] ? 0 : 1
                     console.log(this.documents[arr_index])
@@ -176,7 +176,16 @@
                 store.getDocuments(true)
             },
             deleteDocument(id) {
-                
+                axios.post(`/api/document/delete/${id}`)
+                .then(response => {
+                    this.documents[arr_index]['admin_only'] = this.documents[arr_index]['admin_only'] ? 0 : 1
+                    console.log(this.documents[arr_index])
+                    // console.log(response.data)
+                })
+                .catch(err => {
+                    alert("Something went wrong. Please try again. If problem persists, notify the developers.")
+                    console.error(err)
+                })
                 store.getDocuments(true)
             }
         }

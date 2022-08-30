@@ -67,7 +67,7 @@ class DocumentController extends Controller
     public function togglePermission($id)
     {
         // if (Auth::is_admin()) {
-        if (true) {
+        if (Auth::user()->is_admin) {
             $admin_only = Document::firstWhere('id', $id)->admin_only;
             if ($admin_only) {
                 Document::where('id', $id)->update(['admin_only' => 0]);

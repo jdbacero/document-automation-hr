@@ -101,4 +101,8 @@ Route::get('/csrf', function () {
     return csrf_token();
 });
 
+Route::get('/user', function () {
+    return Auth::user()->is_admin;
+});
+
 require __DIR__ . '/auth.php';

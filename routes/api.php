@@ -18,10 +18,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    // NOTE: Protected API routes.
+
+    Route::post('/document/save', [DocumentController::class, 'store']);
+    Route::post('/document/update', [DocumentController::class, 'store']);
+    Route::put('/document/visibility/{id}', [DocumentController::class, 'toggleVisibility']);
+    Route::put('/document/admin/{id}', [DocumentController::class, 'togglePermission']);
+    Route::post('/document/categories', [DocumentCategoryController::class, 'getAll']);
+});
+
+
 // TODO: Add authentication
-Route::post('/document/save', [DocumentController::class, 'store']);
-Route::post('/document/update', [DocumentController::class, 'store']);
-Route::post('/document/visibility/{id}', [DocumentController::class, 'toggleVisibility']);
-Route::post('/document/admin/{id}', [DocumentController::class, 'togglePermission']);
-Route::post('/document/categories', [DocumentCategoryController::class, 'getAll']);
 // Route::get('/test', [DocumentCategoryController::class, 'getAll']);
