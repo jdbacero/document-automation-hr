@@ -20,7 +20,7 @@ class DocumentCategoryController extends Controller
                                 ->where('visible', 1);
                         }
                     ]
-                )->get();
+                )->where('enabled', 1)->get();
             }
             return DocumentCategory::with(
                 [
@@ -28,7 +28,7 @@ class DocumentCategoryController extends Controller
                         $query->where('visible', 1);
                     }
                 ]
-            )->get();
+            )->where('enabled', 1)->get();
         } else {
             return DocumentCategory::with(
                 [
@@ -36,7 +36,7 @@ class DocumentCategoryController extends Controller
                         $query->where('visible', 1);
                     }
                 ]
-            )->get();
+            )->where('enabled', 1)->get();
         }
     }
 }
