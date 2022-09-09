@@ -52,6 +52,24 @@ class DocumentController extends Controller
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdateDocumentRequest  $request
+     * @param  \App\Models\Document  $document
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateDocumentRequest $request, Document $document)
+    {
+        //
+        $validated = $request->validated();
+        $update = $document->update($validated);
+        if ($update) {
+            return true;
+        }
+        return false;
+    }
+
     public function toggleVisibility($id)
     {
         $visible = Document::firstWhere('id', $id)->visible;
@@ -105,18 +123,6 @@ class DocumentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Document $document)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateDocumentRequest  $request
-     * @param  \App\Models\Document  $document
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateDocumentRequest $request, Document $document)
     {
         //
     }

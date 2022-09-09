@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/document/all', function () {
             return Inertia::render('DocumentList', [
-                'documents' => Document::with('category')->get(),
+                'documents' => Document::with('category')->paginate(10),
                 'categories' => DocumentCategory::all()
             ]);
         });
@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
         Route::get('/document/edit/{id}', function ($id) {
-            $document = Document::firstWhere('id', $id);
+            $document = Document::with('category')->firstWhere('id', $id);
             if (!$document) {
                 abort(404);
             }

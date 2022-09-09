@@ -34,9 +34,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="table-default-row" v-for="(document, index) in documents" :key="document.id">
-                            <td 
-                                class="table-default-td">
+                        <tr class="table-default-row" v-for="(document, index) in documents.data" :key="document.id">
+                            <td class="table-default-td">
                                 {{document["document_title"]}}
                             </td>
                             <td class="table-default-td">
@@ -49,7 +48,6 @@
                                     class="hover:cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline pr-3">Hidden</a>
                             </td>
                             <td class="table-default-td">
-                                <!-- TODO: -->
 
                                 <a v-if="document['admin_only']" @click="toggleDocumentAdmin(document['id'], index)"
                                     class="hover:cursor-pointer font-medium text-yellow-600 dark:text-yellow-500 hover:underline pr-3">Admins</a>
@@ -65,8 +63,12 @@
                         </tr>
                     </tbody>
                 </table>
+                <!-- Paginator -->
+                <Paginator :items="this.documents"></Paginator>
             </div>
         </div>
+        <!-- Paginator -->
+
 
         <h4 class="font-bold mt-12 pb-2 border-b border-gray-200">Categories</h4>
         <div class="mt-8 grid md:grid-cols-3 gap-10">
@@ -106,7 +108,7 @@
                 </table>
             </div>
         </div>
-    
+
     </div>
 </template>
 
@@ -115,13 +117,19 @@
     import {
         Head
     } from '@inertiajs/inertia-vue3'
-    import { store } from './../Shared/components/Store.vue'
+    import {
+        store
+    } from './../Shared/components/Store.vue'
     import axios from 'axios';
+    import { Link } from '@inertiajs/inertia-vue3';
+import Paginator from '../Shared/components/Paginator.vue'
     export default {
         components: {
-            Layout,
-            Head
-        },
+    Layout,
+    Head,
+    Link,
+    Paginator
+},
         layout: Layout,
         props: {
             documents: {
@@ -130,9 +138,8 @@
             categories: {
                 required: true
             }
-        }, 
-        data() {
         },
+        data() {},
         created() {
             // NOTE: Adds local script
             var scripts = [
@@ -152,40 +159,40 @@
             },
             toggleDocumentVisibility(id, arr_index) {
                 axios.put(`/api/document/visibility/${id}`)
-                .then(response => {
-                    this.documents[arr_index]['visible'] = this.documents[arr_index]['visible'] ? 0 : 1
-                    // console.log(response.data)
-                })
-                .catch(err => {
-                    alert("Something went wrong. Please try again. If problem persists, notify the developers.")
-                    console.error(err)
-                })
+                    .then(response => {
+                        this.documents[arr_index]['visible'] = this.documents[arr_index]['visible'] ? 0 : 1
+                        // console.log(response.data)
+                    })
+                    .catch(err => {
+                        alert("Something went wrong. Please try again. If problem persists, notify the developers.")
+                        console.error(err)
+                    })
                 store.getDocuments(true)
             },
             toggleDocumentAdmin(id, arr_index) {
                 axios.put(`/api/document/admin/${id}`)
-                .then(response => {
-                    this.documents[arr_index]['admin_only'] = this.documents[arr_index]['admin_only'] ? 0 : 1
-                    console.log(this.documents[arr_index])
-                    // console.log(response.data)
-                })
-                .catch(err => {
-                    alert("Something went wrong. Please try again. If problem persists, notify the developers.")
-                    console.error(err)
-                })
+                    .then(response => {
+                        this.documents[arr_index]['admin_only'] = this.documents[arr_index]['admin_only'] ? 0 : 1
+                        console.log(this.documents[arr_index])
+                        // console.log(response.data)
+                    })
+                    .catch(err => {
+                        alert("Something went wrong. Please try again. If problem persists, notify the developers.")
+                        console.error(err)
+                    })
                 store.getDocuments(true)
             },
             deleteDocument(id) {
                 axios.post(`/api/document/delete/${id}`)
-                .then(response => {
-                    this.documents[arr_index]['admin_only'] = this.documents[arr_index]['admin_only'] ? 0 : 1
-                    console.log(this.documents[arr_index])
-                    // console.log(response.data)
-                })
-                .catch(err => {
-                    alert("Something went wrong. Please try again. If problem persists, notify the developers.")
-                    console.error(err)
-                })
+                    .then(response => {
+                        this.documents[arr_index]['admin_only'] = this.documents[arr_index]['admin_only'] ? 0 : 1
+                        console.log(this.documents[arr_index])
+                        // console.log(response.data)
+                    })
+                    .catch(err => {
+                        alert("Something went wrong. Please try again. If problem persists, notify the developers.")
+                        console.error(err)
+                    })
                 store.getDocuments(true)
             }
         }
